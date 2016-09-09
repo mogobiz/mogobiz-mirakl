@@ -355,7 +355,7 @@ object ShippingModel {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   case class ShopShippingFees(currency_iso_code: String,
-                              @JsonScalaEnumeration(classOf[ShippingFeeErrorCodeRef]) error_code: ShippingFeeErrorCode.ShippingFeeErrorCode,
+                              @JsonScalaEnumeration(classOf[ShippingFeeErrorCodeRef]) error_code: Option[ShippingFeeErrorCode.ShippingFeeErrorCode],
                               error_message: String,
                               leadtime_to_ship: Long,
                               offers: List[Offer],

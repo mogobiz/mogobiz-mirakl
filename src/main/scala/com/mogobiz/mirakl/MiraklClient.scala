@@ -6,7 +6,7 @@ import com.mogobiz.json.JacksonConverter
 import com.mogobiz.mirakl.CommonModel.MiraklError
 import com.mogobiz.mirakl.OrderModel.{OrderBean, OrderCreatedDTO}
 import com.mogobiz.mirakl.PaymentModel.{OrderPaymentsDto, RefundedOrderLinesBean}
-import com.mogobiz.mirakl.ShippingModel.ShopShippingFeesDto
+import com.mogobiz.mirakl.ShippingModel.{ShopShippingFeesDto, ShippingFeeErrorCode}
 import com.mogobiz.system.ActorSystemLocator
 import spray.client.pipelining._
 import spray.http.{HttpRequest, HttpResponse, StatusCodes}
@@ -62,15 +62,21 @@ object MiraklClient {
     }
   }
 
-  def getShopShippingsFees(shippingZoneCode: String, offerIdsAndQuantity: List[(Long, Int)]) : Option[ShopShippingFeesDto] = {
+  def getShopShippingsFees(shippingZoneCode: String, offerIdsAndQuantity: List[(Long, Int)]) : (Option[ShippingFeeErrorCode.ShippingFeeErrorCode], Option[ShopShippingFeesDto]) = {
     val responseFuture = basicPipeline {
       MiraklApi.SH01(shippingZoneCode, offerIdsAndQuantity)
     }
     val response = Await.result(responseFuture, TIMEOUT)
+    val json : String = response.entity.asString
     if (response.status == StatusCodes.OK) {
-      val json : String = response.entity.asString
-      Some(JacksonConverter.deserialize[ShopShippingFeesDto](json))
+      (None, Some(JacksonConverter.deserialize[ShopShippingFeesDto](json)))
     }
-    else None
+    else {
+      val error = JacksonConverter.deserialize[MiraklError](json)
+      if (error.message.startsWith("Invalid value for field 'shippingZoneCode'")) {
+        (Some(ShippingFeeErrorCode.SHIPPING_ZONE_NOT_ALLOWED), None)
+      }
+      else (None, None)
+    }
   }
 }
