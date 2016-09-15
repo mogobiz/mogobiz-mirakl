@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2015 Mogobiz SARL. All rights reserved.
+ */
 package com.mogobiz.mirakl
 
 import java.util.{Locale, UUID}
@@ -10,9 +13,6 @@ import spray.testkit.Specs2RouteTest
 
 import scala.util.Success
 
-/**
-  * Created by yoannbaudy on 02/09/2016.
-  */
 class MiraklClientSpec extends Specification with Specs2RouteTest {
 
   def actorRefFactory = system // connect the DSL to the test ActorSystem

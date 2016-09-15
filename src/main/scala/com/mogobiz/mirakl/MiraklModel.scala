@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2015 Mogobiz SARL. All rights reserved.
+ */
 package com.mogobiz.mirakl
 
 import java.util.Date
@@ -6,9 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 
-/**
-  * Created by yoannbaudy on 02/09/2016.
-  */
 object CommonModel {
 
   object AdditionalFieldType extends Enumeration {

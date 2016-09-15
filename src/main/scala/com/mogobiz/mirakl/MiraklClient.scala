@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2015 Mogobiz SARL. All rights reserved.
+ */
 package com.mogobiz.mirakl
 
 import java.util.concurrent.TimeUnit
@@ -15,9 +18,6 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success, Try}
 
-/**
-  * Created by yoannbaudy on 02/09/2016.
-  */
 object MiraklClient {
 
   val frontApiKey = Settings.frontApiKey

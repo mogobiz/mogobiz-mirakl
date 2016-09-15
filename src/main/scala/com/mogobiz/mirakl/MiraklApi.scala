@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2015 Mogobiz SARL. All rights reserved.
+ */
 package com.mogobiz.mirakl
 
 import java.util.regex.Pattern
@@ -7,9 +10,6 @@ import com.mogobiz.mirakl.OrderModel._
 import spray.http.HttpRequest
 import spray.httpx.RequestBuilding._
 
-/**
-  * Created by yoannbaudy on 02/09/2016.
-  */
 object MiraklApi {
 
   val baseUrl = Settings.url

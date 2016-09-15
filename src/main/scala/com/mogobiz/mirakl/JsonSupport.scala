@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2015 Mogobiz SARL. All rights reserved.
+ */
 package com.mogobiz.mirakl
 
 import com.mogobiz.mirakl.CommonModel.AdditionalFieldType
@@ -8,9 +11,6 @@ import org.json4s.DefaultFormats
 import org.json4s.ext.EnumSerializer
 import spray.httpx.Json4sJacksonSupport
 
-/**
-  * Created by yoannbaudy on 05/09/2016.
-  */
 object JsonSupport extends Json4sJacksonSupport {
 
   val miraklJsonFormat = DefaultFormats +
