@@ -26,6 +26,14 @@ object CommonModel {
   }
   class AdditionalFieldTypeRef extends TypeReference[AdditionalFieldType.type]
 
+  object PaymentWorkflow extends Enumeration {
+    type PaymentWorkflow = Value
+
+    val PAY_ON_ACCEPTANCE = Value("PAY_ON_ACCEPTANCE")
+    val PAY_ON_DELIVERY = Value("PAY_ON_DELIVERY")
+  }
+  class PaymentWorkflowRef extends TypeReference[PaymentWorkflow.type]
+
   case class MiraklError(message: String, status: Long)
 
   case class Channel(code: String, label: String)
@@ -87,6 +95,7 @@ object CommonModel {
 }
 
 object PaymentModel {
+  import com.mogobiz.mirakl.CommonModel._
 
   object PaymentStatus extends Enumeration {
     type PaymentStatus = Value
@@ -122,6 +131,7 @@ object PaymentModel {
                         currency_iso_code: Option[String],
                         order_commercial_id: Option[String],
                         order_id: Option[String],
+                        payment_workflow: Option[PaymentWorkflow.PaymentWorkflow],
                         shop_id: Option[String],
                         order_lines: Option[DebitOrderLineList])
 
@@ -131,18 +141,34 @@ object PaymentModel {
                             order_line_quantity: Long,
                             offer_id: String,
                             order_line_id: String)
+
+  case class RefundOrderList(order: List[RefundOrder])
+
+  case class RefundOrder(amount: Option[BigDecimal],
+                        customer_id: String,
+                        currency_iso_code: Option[String],
+                        order_commercial_id: Option[String],
+                        order_id: Option[String],
+                        payment_workflow: Option[PaymentWorkflow.PaymentWorkflow],
+                        shop_id: Option[String],
+                        order_lines: Option[RefundOrderLineList])
+
+  case class RefundOrderLineList(order_line: List[RefundOrderLine])
+
+  case class RefundOrderLine(order_line_amount: BigDecimal,
+                            @Deprecated
+                            order_line_quantity: Long,
+                            offer_id: String,
+                            order_line_id: String,
+                            refunds: Option[RefundOrderLineRefundList])
+
+  case class RefundOrderLineRefundList(refund: List[RefundOrderLineRefund])
+
+  case class RefundOrderLineRefund(amount: BigDecimal, id: String)
 }
 
 object OrderModel {
   import com.mogobiz.mirakl.CommonModel._
-
-  object PaymentWorkflow extends Enumeration {
-    type PaymentWorkflow = Value
-
-    val PAY_ON_ACCEPTANCE = Value("PAY_ON_ACCEPTANCE")
-    val PAY_ON_DELIVERY = Value("PAY_ON_DELIVERY")
-  }
-  class PaymentWorkflowRef extends TypeReference[PaymentWorkflow.type]
 
   object OrderState extends Enumeration {
     type OrderState = Value

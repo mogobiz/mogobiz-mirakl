@@ -39,7 +39,7 @@ object MiraklClient {
     response.status == StatusCodes.NoContent
   }
 
-  def configRefund(body: RefundedOrderLinesBean): Boolean = {
+  def confirmRefund(body: RefundedOrderLinesBean): Boolean = {
     val responseFuture = basicPipeline {
       MiraklApi.PA02(body)
     }
