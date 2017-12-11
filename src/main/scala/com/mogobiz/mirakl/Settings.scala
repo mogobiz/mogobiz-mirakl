@@ -9,8 +9,7 @@ object Settings {
 
   lazy val config: Config = ConfigFactory.load("mirakl").withFallback(ConfigFactory.load("default-mirakl"))
 
-  lazy val url = config getString "mirakl.url"
+  lazy val url         = config getString "mirakl.url"
   lazy val frontApiKey = config getString "mirakl.frontApiKey"
-  lazy val timeout = config getLong "mirakl.timeout"
+  lazy val timeout     = config getLong "mirakl.timeout"
 }
-

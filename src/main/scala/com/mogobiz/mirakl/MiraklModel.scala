@@ -8,20 +8,21 @@ import java.util.Date
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
+import com.mogobiz.mirakl.CommonModel.{AdditionalFieldWithType, OfferDiscout}
 
 object CommonModel {
 
   object AdditionalFieldType extends Enumeration {
     type AdditionalFieldType = Value
 
-    val STRING = Value("STRING")
-    val DATE = Value("DATE")
-    val NUMERIC = Value("NUMERIC")
-    val BOOLEAN = Value("BOOLEAN")
-    val LINK = Value("LINK")
-    val REGEX = Value("REGEX")
-    val TEXTAREA = Value("TEXTAREA")
-    val LIST = Value("LIST")
+    val STRING               = Value("STRING")
+    val DATE                 = Value("DATE")
+    val NUMERIC              = Value("NUMERIC")
+    val BOOLEAN              = Value("BOOLEAN")
+    val LINK                 = Value("LINK")
+    val REGEX                = Value("REGEX")
+    val TEXTAREA             = Value("TEXTAREA")
+    val LIST                 = Value("LIST")
     val MULTIPLE_VALUES_LIST = Value("MULTIPLE_VALUES_LIST")
   }
   class AdditionalFieldTypeRef extends TypeReference[AdditionalFieldType.type]
@@ -30,7 +31,7 @@ object CommonModel {
     type PaymentWorkflow = Value
 
     val PAY_ON_ACCEPTANCE = Value("PAY_ON_ACCEPTANCE")
-    val PAY_ON_DELIVERY = Value("PAY_ON_DELIVERY")
+    val PAY_ON_DELIVERY   = Value("PAY_ON_DELIVERY")
   }
   class PaymentWorkflowRef extends TypeReference[PaymentWorkflow.type]
 
@@ -77,9 +78,10 @@ object CommonModel {
                       billing_address: Address,
                       shipping_address: ShippingAddress)
 
-  case class AdditionalFieldWithType(code: String,
-                                     @JsonScalaEnumeration(classOf[AdditionalFieldTypeRef]) `type`: Option[AdditionalFieldType.AdditionalFieldType],
-                                     value: String)
+  case class AdditionalFieldWithType(
+      code: String,
+      @JsonScalaEnumeration(classOf[AdditionalFieldTypeRef]) `type`: Option[AdditionalFieldType.AdditionalFieldType],
+      value: String)
 
   case class Range(price: BigDecimal, quantity_threshold: Long)
 
@@ -100,7 +102,7 @@ object PaymentModel {
   object PaymentStatus extends Enumeration {
     type PaymentStatus = Value
 
-    val OK = Value("OK")
+    val OK      = Value("OK")
     val REFUSED = Value("REFUSED")
   }
   class PaymentStatusRef extends TypeReference[PaymentStatus.type]
@@ -145,22 +147,21 @@ object PaymentModel {
   case class RefundOrderList(order: List[RefundOrder])
 
   case class RefundOrder(amount: Option[BigDecimal],
-                        customer_id: String,
-                        currency_iso_code: Option[String],
-                        order_commercial_id: Option[String],
-                        order_id: Option[String],
-                        payment_workflow: Option[PaymentWorkflow.PaymentWorkflow],
-                        shop_id: Option[String],
-                        order_lines: Option[RefundOrderLineList])
+                         customer_id: String,
+                         currency_iso_code: Option[String],
+                         order_commercial_id: Option[String],
+                         order_id: Option[String],
+                         payment_workflow: Option[PaymentWorkflow.PaymentWorkflow],
+                         shop_id: Option[String],
+                         order_lines: Option[RefundOrderLineList])
 
   case class RefundOrderLineList(order_line: List[RefundOrderLine])
 
   case class RefundOrderLine(order_line_amount: BigDecimal,
-                            @Deprecated
-                            order_line_quantity: Long,
-                            offer_id: String,
-                            order_line_id: String,
-                            refunds: Option[RefundOrderLineRefundList])
+                             @Deprecated order_line_quantity: Long,
+                             offer_id: String,
+                             order_line_id: String,
+                             refunds: Option[RefundOrderLineRefundList])
 
   case class RefundOrderLineRefundList(refund: List[RefundOrderLineRefund])
 
@@ -173,61 +174,62 @@ object OrderModel {
   object OrderState extends Enumeration {
     type OrderState = Value
 
-    val STAGING = Value("STAGING")
-    val WAITING_ACCEPTANCE = Value("WAITING_ACCEPTANCE")
-    val WAITING_DEBIT = Value("WAITING_DEBIT")
-    val WAITING_DEBIT_PAYMENT = Value("WAITING_DEBIT_PAYMENT")
-    val SHIPPING = Value("SHIPPING")
-    val SHIPPED = Value("SHIPPED")
-    val TO_COLLECT = Value("TO_COLLECT")
-    val RECEIVED = Value("RECEIVED")
-    val CLOSED = Value("CLOSED")
-    val REFUSED = Value("REFUSED")
-    val CANCELED = Value("CANCELED")
+    val STAGING: OrderModel.OrderState.Value = Value("STAGING")
+    val WAITING_ACCEPTANCE                   = Value("WAITING_ACCEPTANCE")
+    val WAITING_DEBIT                        = Value("WAITING_DEBIT")
+    val WAITING_DEBIT_PAYMENT                = Value("WAITING_DEBIT_PAYMENT")
+    val SHIPPING                             = Value("SHIPPING")
+    val SHIPPED                              = Value("SHIPPED")
+    val TO_COLLECT                           = Value("TO_COLLECT")
+    val RECEIVED                             = Value("RECEIVED")
+    val CLOSED                               = Value("CLOSED")
+    val REFUSED                              = Value("REFUSED")
+    val CANCELED                             = Value("CANCELED")
   }
   class OrderStateRef extends TypeReference[OrderState.type]
 
   object OrderLineState extends Enumeration {
     type OrderLineState = Value
 
-    val STAGING = Value("STAGING")
-    val WAITING_ACCEPTANCE = Value("WAITING_ACCEPTANCE")
-    val WAITING_DEBIT = Value("WAITING_DEBIT")
+    val STAGING               = Value("STAGING")
+    val WAITING_ACCEPTANCE    = Value("WAITING_ACCEPTANCE")
+    val WAITING_DEBIT         = Value("WAITING_DEBIT")
     val WAITING_DEBIT_PAYMENT = Value("WAITING_DEBIT_PAYMENT")
-    val SHIPPING = Value("SHIPPING")
-    val SHIPPED = Value("SHIPPED")
-    val TO_COLLECT = Value("TO_COLLECT")
-    val RECEIVED = Value("RECEIVED")
-    val CLOSED = Value("CLOSED")
-    val REFUSED = Value("REFUSED")
-    val CANCELED = Value("CANCELED")
-    val INCIDENT_OPEN = Value("INCIDENT_OPEN")
+    val SHIPPING              = Value("SHIPPING")
+    val SHIPPED               = Value("SHIPPED")
+    val TO_COLLECT            = Value("TO_COLLECT")
+    val RECEIVED              = Value("RECEIVED")
+    val CLOSED                = Value("CLOSED")
+    val REFUSED               = Value("REFUSED")
+    val CANCELED              = Value("CANCELED")
+    val INCIDENT_OPEN         = Value("INCIDENT_OPEN")
     @Deprecated
     val WAITING_REFUND = Value("WAITING_REFUND")
     @Deprecated
     val WAITING_REFUND_PAYMENT = Value("WAITING_REFUND_PAYMENT")
-    val REFUNDED = Value("REFUNDED")
+    val REFUNDED               = Value("REFUNDED")
   }
   class OrderLineStateRef extends TypeReference[OrderLineState.type]
 
   object RefundState extends Enumeration {
     type RefundState = Value
 
-    val WAITING_REFUND = Value("WAITING_REFUND")
+    val WAITING_REFUND         = Value("WAITING_REFUND")
     val WAITING_REFUND_PAYMENT = Value("WAITING_REFUND_PAYMENT")
-    val REFUNDED = Value("REFUNDED")
+    val REFUNDED               = Value("REFUNDED")
   }
   class RefundStateRef extends TypeReference[RefundState.type]
 
-  case class OrderBean(channel_code: Option[String] = None,
-                       commercial_id: String,
-                       customer: Customer,
-                       offers: List[Offer],
-                       order_additional_fields: List[AdditionalFieldWithType],
-                       payment_info: Option[PaymentInfo],
-                       @JsonScalaEnumeration(classOf[PaymentWorkflowRef]) payment_workflow: Option[PaymentWorkflow.PaymentWorkflow],
-                       scored: Boolean,
-                       shipping_zone_code: String)
+  case class OrderBean(
+      channel_code: Option[String] = None,
+      commercial_id: String,
+      customer: Customer,
+      offers: List[Offer],
+      order_additional_fields: List[AdditionalFieldWithType],
+      payment_info: Option[PaymentInfo],
+      @JsonScalaEnumeration(classOf[PaymentWorkflowRef]) payment_workflow: Option[PaymentWorkflow.PaymentWorkflow],
+      scored: Boolean,
+      shipping_zone_code: String)
 
   case class PaymentInfo(imprint_number: Option[String], payment_type: Option[String])
 
@@ -244,86 +246,87 @@ object OrderModel {
                    shipping_taxes: List[ShippingTax],
                    taxes: List[Tax])
 
-  case class OrderCreatedDTO(offers_not_shippable: List[OfferNotShippable],
-                             orders: List[OrderCreated])
+  case class OrderCreatedDTO(offers_not_shippable: List[OfferNotShippable], orders: List[OrderCreated])
 
   case class OfferNotShippable(error_code: String, offer_id: Long)
 
   @JsonIgnoreProperties(ignoreUnknown = true)
-  case class OrderCreated(acceptance_decision_date: Option[Date],
-                          can_cancel: Boolean,
-                          can_evaluate: Boolean,
-                          channel: Option[Channel],
-                          commercial_id: String,
-                          created_date: Date,
-                          currency_iso_code: String,
-                          customer: Customer,
-                          customer_debited_date: Option[Date],
-                          has_customer_message: Boolean,
-                          has_incident: Boolean,
-                          has_invoice: Boolean,
-                          imprint_number: String,
-                          last_updated_date: Date,
-                          leadtime_to_ship: Integer,
-                          order_additional_fields: List[AdditionalFieldWithType],
-                          order_id: String,
-                          order_lines: List[OrderLine],
-                          @JsonScalaEnumeration(classOf[OrderStateRef]) order_state: OrderState.OrderState,
-                          order_state_reason_code: Option[String],
-                          order_state_reason_label: Option[String],
-                          payment_type: String,
-                          @JsonScalaEnumeration(classOf[PaymentWorkflowRef]) payment_workflow: PaymentWorkflow.PaymentWorkflow,
-                          price: BigDecimal,
-                          quote_id: Option[String],
-                          shipping_carrier_code: Option[String],
-                          shipping_company: Option[String],
-                          shipping_price: BigDecimal,
-                          shipping_tracking: Option[String],
-                          shipping_tracking_url: Option[String],
-                          shipping_type_code: String,
-                          shipping_type_label: String,
-                          shipping_zone_code: String,
-                          shipping_zone_label: String,
-                          shop_id: Long,
-                          shop_name: String,
-                          total_commission: BigDecimal,
-                          total_price: BigDecimal)
+  case class OrderCreated(
+      acceptance_decision_date: Option[Date],
+      can_cancel: Boolean,
+      can_evaluate: Boolean,
+      channel: Option[Channel],
+      commercial_id: String,
+      created_date: Date,
+      currency_iso_code: String,
+      customer: Customer,
+      customer_debited_date: Option[Date],
+      has_customer_message: Boolean,
+      has_incident: Boolean,
+      has_invoice: Boolean,
+      imprint_number: String,
+      last_updated_date: Date,
+      leadtime_to_ship: Integer,
+      order_additional_fields: List[AdditionalFieldWithType],
+      order_id: String,
+      order_lines: List[OrderLine],
+      @JsonScalaEnumeration(classOf[OrderStateRef]) order_state: OrderState.OrderState,
+      order_state_reason_code: Option[String],
+      order_state_reason_label: Option[String],
+      payment_type: String,
+      @JsonScalaEnumeration(classOf[PaymentWorkflowRef]) payment_workflow: PaymentWorkflow.PaymentWorkflow,
+      price: BigDecimal,
+      quote_id: Option[String],
+      shipping_carrier_code: Option[String],
+      shipping_company: Option[String],
+      shipping_price: BigDecimal,
+      shipping_tracking: Option[String],
+      shipping_tracking_url: Option[String],
+      shipping_type_code: String,
+      shipping_type_label: String,
+      shipping_zone_code: String,
+      shipping_zone_label: String,
+      shop_id: Long,
+      shop_name: String,
+      total_commission: BigDecimal,
+      total_price: BigDecimal)
 
   @JsonIgnoreProperties(ignoreUnknown = true)
-  case class OrderLine(can_open_incident: Boolean,
-                       can_refund: Boolean,
-                       cancelations: List[Cancelation],
-                       category_code: String,
-                       category_label: String,
-                       commission_fee: BigDecimal,
-                       commission_taxes: List[CommissionTax],
-                       created_date: Date,
-                       debited_date: Option[Date],
-                       description: String,
-                       last_updated_date: Date,
-                       offer_id: Long,
-                       offer_sku: String,
-                       offer_state_code: String,
-                       order_line_additional_fields: List[AdditionalFieldWithType],
-                       order_line_id: String,
-                       order_line_index: Int,
-                       @JsonScalaEnumeration(classOf[OrderLineStateRef]) order_line_state: OrderLineState.OrderLineState,
-                       order_line_state_reason_code: Option[String],
-                       order_line_state_reason_label: Option[String],
-                       price: BigDecimal,
-                       price_additional_info: Option[String],
-                       price_unit: BigDecimal,
-                       product_medias: List[ProductMedia],
-                       product_sku: String,
-                       product_title: String,
-                       quantity: Int,
-                       received_date: Option[Date],
-                       refunds: List[OrderLineRefund],
-                       shipped_date: Option[Date],
-                       shipping_price: BigDecimal,
-                       shipping_taxes: List[ShippingTax],
-                       total_commission: BigDecimal,
-                       total_price: BigDecimal)
+  case class OrderLine(
+      can_open_incident: Boolean,
+      can_refund: Boolean,
+      cancelations: List[Cancelation],
+      category_code: String,
+      category_label: String,
+      commission_fee: BigDecimal,
+      commission_taxes: List[CommissionTax],
+      created_date: Date,
+      debited_date: Option[Date],
+      description: String,
+      last_updated_date: Date,
+      offer_id: Long,
+      offer_sku: String,
+      offer_state_code: String,
+      order_line_additional_fields: List[AdditionalFieldWithType],
+      order_line_id: String,
+      order_line_index: Int,
+      @JsonScalaEnumeration(classOf[OrderLineStateRef]) order_line_state: OrderLineState.OrderLineState,
+      order_line_state_reason_code: Option[String],
+      order_line_state_reason_label: Option[String],
+      price: BigDecimal,
+      price_additional_info: Option[String],
+      price_unit: BigDecimal,
+      product_medias: List[ProductMedia],
+      product_sku: String,
+      product_title: String,
+      quantity: Int,
+      received_date: Option[Date],
+      refunds: List[OrderLineRefund],
+      shipped_date: Option[Date],
+      shipping_price: BigDecimal,
+      shipping_taxes: List[ShippingTax],
+      total_commission: BigDecimal,
+      total_price: BigDecimal)
 
   case class OrderLineRefund(amount: Option[BigDecimal],
                              commission_amount: BigDecimal,
@@ -340,10 +343,7 @@ object OrderModel {
                              transaction_date: Date,
                              transaction_number: String)
 
-  case class CommissionTax(amount: BigDecimal,
-                           code: String,
-                           rate: BigDecimal,
-                           created_date: Date)
+  case class CommissionTax(amount: BigDecimal, code: String, rate: BigDecimal, created_date: Date)
 
   case class Cancelation(amount: Option[BigDecimal],
                          commission_amount: BigDecimal,
@@ -357,31 +357,26 @@ object OrderModel {
                          shipping_taxes: List[ShippingTax],
                          taxes: List[Tax])
 
-  case class ProductMedia(media_url: String,
-                          mime_type: String,
-                          `type`: String)
+  case class ProductMedia(media_url: String, mime_type: String, `type`: String)
 }
 
 object ShippingModel {
-
-  import com.mogobiz.mirakl.CommonModel._
 
   object ShippingFeeErrorCode extends Enumeration {
     type ShippingFeeErrorCode = Value
 
     val SHIPPING_ZONE_NOT_ALLOWED = Value("SHIPPING_ZONE_NOT_ALLOWED")
     val SHIPPING_TYPE_NOT_ALLOWED = Value("SHIPPING_TYPE_NOT_ALLOWED")
-    val OFFER_NOT_FOUND = Value("OFFER_NOT_FOUND")
+    val OFFER_NOT_FOUND           = Value("OFFER_NOT_FOUND")
   }
   class ShippingFeeErrorCodeRef extends TypeReference[ShippingFeeErrorCode.type]
 
-  case class ShopShippingFeesDto(offers_not_found: List[Long],
-                                 shops: List[ShopShippingFees],
-                                 total_count: Long)
+  case class ShopShippingFeesDto(offers_not_found: List[Long], shops: List[ShopShippingFees], total_count: Long)
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   case class ShopShippingFees(currency_iso_code: String,
-                              @JsonScalaEnumeration(classOf[ShippingFeeErrorCodeRef]) error_code: Option[ShippingFeeErrorCode.ShippingFeeErrorCode],
+                              @JsonScalaEnumeration(classOf[ShippingFeeErrorCodeRef]) error_code: Option[
+                                  ShippingFeeErrorCode.ShippingFeeErrorCode],
                               error_message: String,
                               leadtime_to_ship: Long,
                               offers: List[Offer],
@@ -395,13 +390,13 @@ object ShippingModel {
                                   shipping_additional_fields: List[AdditionalFieldWithType])
 
   case class OfferShippingType(code: String,
-                          label: String,
-                          line_only_shipping_price: BigDecimal,
-                          line_only_total_price: BigDecimal,
-                          line_shipping_price: BigDecimal,
-                          line_total_price: BigDecimal,
-                          shipping_price_additional_unit: BigDecimal,
-                          shipping_price_unit: BigDecimal)
+                               label: String,
+                               line_only_shipping_price: BigDecimal,
+                               line_only_total_price: BigDecimal,
+                               line_shipping_price: BigDecimal,
+                               line_total_price: BigDecimal,
+                               shipping_price_additional_unit: BigDecimal,
+                               shipping_price_unit: BigDecimal)
 
   case class ShopShippingType(code: String,
                               label: String,

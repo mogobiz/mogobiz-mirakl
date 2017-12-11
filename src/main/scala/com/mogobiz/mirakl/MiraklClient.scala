@@ -9,7 +9,7 @@ import com.mogobiz.json.JacksonConverter
 import com.mogobiz.mirakl.CommonModel.MiraklError
 import com.mogobiz.mirakl.OrderModel.{OrderBean, OrderCreatedDTO}
 import com.mogobiz.mirakl.PaymentModel.{OrderPaymentsDto, RefundedOrderLinesBean}
-import com.mogobiz.mirakl.ShippingModel.{ShopShippingFeesDto, ShippingFeeErrorCode}
+import com.mogobiz.mirakl.ShippingModel.{ShippingFeeErrorCode, ShopShippingFeesDto}
 import com.mogobiz.system.ActorSystemLocator
 import spray.client.pipelining._
 import spray.http.{HttpRequest, HttpResponse, StatusCodes}
@@ -21,7 +21,7 @@ import scala.util.{Failure, Success, Try}
 object MiraklClient {
 
   val frontApiKey = Settings.frontApiKey
-  val TIMEOUT = Duration.create(Settings.timeout, TimeUnit.SECONDS)
+  val TIMEOUT     = Duration.create(Settings.timeout, TimeUnit.SECONDS)
 
   implicit val system = ActorSystemLocator.apply()
   import system.dispatcher
@@ -29,7 +29,8 @@ object MiraklClient {
   private def defaultHeaders() = {
     (addHeader("Accept", "application/json") ~> addHeader("Authorization", frontApiKey))
   }
-  private def basicPipeline: HttpRequest => Future[HttpResponse] = defaultHeaders ~> sendReceive //~> unmarshal[HttpResponse]
+  private def basicPipeline: HttpRequest => Future[HttpResponse] =
+    defaultHeaders ~> sendReceive //~> unmarshal[HttpResponse]
 
   def confimDebit(body: OrderPaymentsDto): Boolean = {
     val responseFuture = basicPipeline {
@@ -47,36 +48,34 @@ object MiraklClient {
     response.status == StatusCodes.NoContent
   }
 
-  def createOrder(body: OrderBean) : Try[OrderCreatedDTO] = {
+  def createOrder(body: OrderBean): Try[OrderCreatedDTO] = {
     val responseFuture = basicPipeline {
       MiraklApi.OR01(body)
     }
     val response = Await.result(responseFuture, TIMEOUT)
     if (response.status == StatusCodes.OK) {
-      val json : String = response.entity.asString
+      val json: String = response.entity.asString
       Success(JacksonConverter.deserialize[OrderCreatedDTO](json))
-    }
-    else {
-      val json : String = response.entity.asString
+    } else {
+      val json: String = response.entity.asString
       Failure(new MiraklCreateOrderException(JacksonConverter.deserialize[MiraklError](json)))
     }
   }
 
-  def getShopShippingsFees(shippingZoneCode: String, offerIdsAndQuantity: List[(Long, Int)]) : (Option[ShippingFeeErrorCode.ShippingFeeErrorCode], Option[ShopShippingFeesDto]) = {
+  def getShopShippingsFees(shippingZoneCode: String, offerIdsAndQuantity: List[(Long, Int)])
+    : (Option[ShippingFeeErrorCode.ShippingFeeErrorCode], Option[ShopShippingFeesDto]) = {
     val responseFuture = basicPipeline {
       MiraklApi.SH01(shippingZoneCode, offerIdsAndQuantity)
     }
-    val response = Await.result(responseFuture, TIMEOUT)
-    val json : String = response.entity.asString
+    val response     = Await.result(responseFuture, TIMEOUT)
+    val json: String = response.entity.asString
     if (response.status == StatusCodes.OK) {
       (None, Some(JacksonConverter.deserialize[ShopShippingFeesDto](json)))
-    }
-    else {
+    } else {
       val error = JacksonConverter.deserialize[MiraklError](json)
       if (error.message.startsWith("Invalid value for field 'shippingZoneCode'")) {
         (Some(ShippingFeeErrorCode.SHIPPING_ZONE_NOT_ALLOWED), None)
-      }
-      else (None, None)
+      } else (None, None)
     }
   }
 }
